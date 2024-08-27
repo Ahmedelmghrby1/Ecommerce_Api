@@ -20,5 +20,8 @@ logo:String
     timestamps:true,
     versionKey:false,
 })
+schema.post('init',function(doc){
+    doc.logo = process.env.BASE_URL + "brands/" + doc.logo
+})
 
 export const Brand = model ('Brand', schema)

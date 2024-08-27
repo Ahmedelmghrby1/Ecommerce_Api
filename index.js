@@ -7,10 +7,13 @@ import { db } from "./Database/dbConnection.js";
 import { AppError } from "./src/utils/appError.js";
 import { globalError } from "./src/Middlewares/globalError.js";
 import { bootstrab } from "./src/Modules/bootstrab.js";
+// import dotenv from "dotenv"
+// dotenv.config();
+import 'dotenv/config'
 const app = express();
 const port = 3000;
 app.use(express.json());
-
+app.use('/uploads',express.static('uploads'))
 bootstrab(app)
 
 

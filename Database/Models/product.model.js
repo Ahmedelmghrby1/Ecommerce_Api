@@ -1,12 +1,12 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 const schema =new Schema({
-name:{
+title:{
     type:String,
     required:true,
-    unique:[true , 'name is required'],
+    unique:[true , 'title is required'],
     trim:true,
-    mineLength:[2, 'to0 short category name']
+    mineLength:[2, 'to0 short product title']
 },
 slug:{
     type:String,
@@ -60,6 +60,25 @@ rateCount:Number
 {
     timestamps:true,
     versionKey:false,
+    toJSON:{
+        virtuals:true
+    },id:false
+})
+schema.virtual('myReview',{
+    ref:'Review',
+    localField:'_id',
+    foreignField:'product'
+
+})
+schema.pre("findOne", function(){
+    this.populate('myReview')
 })
 
-export const Category = model ('Cateory', schema)
+
+schema.post('init',function(doc){
+    if(doc.imageCover) {doc.imageCover = process.env.BASE_URL + "products/" + doc.imageCover}
+    if(doc.images)  {doc.images = doc.images.map(img=> process.env.BASE_URL + "products/" + img)}
+})
+
+
+export const Product = model ('Product', schema)
